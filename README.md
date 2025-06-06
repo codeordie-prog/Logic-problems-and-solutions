@@ -20,7 +20,7 @@ Each problem category has its own directory containing:
 - Complexity analysis
 - Test cases
 
-## Current Problems
+## Example of a Problem
 
 ### Dynamic Programming
 - **Unique Paths**: Calculate the number of unique paths a robot can take from the top-left to bottom-right corner of an m x n grid, moving only right or down.
