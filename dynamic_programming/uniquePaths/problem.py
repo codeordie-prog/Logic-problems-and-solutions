@@ -24,7 +24,7 @@ class ProblemStatement:
 
 
 class Specifications:
-    """
+    METHOD_A = f"""
     1. Movement constraint: The robot can only move either right or down (2 possibilities).
     2. Pointers:
        - i: pointer for m (starts at 0, ends at m-1)
@@ -40,6 +40,21 @@ class Specifications:
         Note: We use m-1 and n-1 because pointers are initialized at 0
     11. Out of bounds condition: Going past m-1 OR past n-1
     12. Implementation approach: Use recursion to try both possible movements
+    """
+
+    METHOD_B = f"""
+    1. Initialize a 2D table of size m x n with all cells set to 0
+    2. Base Cases:
+       - First row: Set all cells to 1 (only one way to reach each cell - moving right)
+       - First column: Set all cells to 1 (only one way to reach each cell - moving down)
+    3. For each cell (i,j) where i > 0 and j > 0:
+       - Number of paths = paths from top (i-1,j) + paths from left (i,j-1)
+    4. Fill the table iteratively:
+       - Start from (1,1)
+       - Move row by row or column by column
+       - Each cell's value depends on its top and left neighbors
+    5. The final answer will be in table[m-1][n-1]
+    6. Implementation approach: Use tabulation (bottom-up dynamic programming)
     """
 
 
@@ -58,7 +73,23 @@ class EfficiencyHandling:
     """
 
     METHOD_B = """
-    TABULATION
+    TABULATION (BOTTOM-UP DYNAMIC PROGRAMMING)
+
+    1. Time Complexity: O(m * n)
+       - We visit each cell exactly once
+       - For each cell, we perform O(1) operations
+       - Total operations = m * n
+
+    2. Space Complexity: O(m * n)
+       - We maintain a 2D table of size m * n
+       - Each cell stores the number of paths to reach it
+       - No additional space is needed
+
+    3. Advantages over Recursion with Memoization:
+       - No recursion overhead
+       - No stack space for recursive calls
+       - More straightforward to implement
+       - Better cache utilization due to sequential access
     """
 
 
@@ -93,5 +124,27 @@ class Pseudocode:
 
         # Start exploration from origin
         RETURN findpaths(i=0, j=0)
+    """
+
+    METHOD_B = """
+    TABULATION (BOTTOM-UP)
+    
+    FUNCTION uniquePaths(m, n):
+        # Initialize table with zeros
+        table = 2D array of size m x n filled with 0
+
+        # Set base cases
+        FOR i = 0 to m-1:
+            table[i][0] = 1  # First column
+        FOR j = 0 to n-1:
+            table[0][j] = 1  # First row
+
+        # Fill the table
+        FOR i = 1 to m-1:
+            FOR j = 1 to n-1:
+                table[i][j] = table[i-1][j] + table[i][j-1]
+
+        # Return the result
+        RETURN table[m-1][n-1]
     """
     

@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, Final
+from typing import Dict, Tuple, Final, List
 
 
 class RecursionPlusMemoization:
@@ -96,14 +96,95 @@ class RecursionPlusMemoization:
         return find_paths(0, 0)
 
 
+class BottomUpTabulation:
+    """
+    This class implements the solution for the Unique Paths problem using bottom-up dynamic programming (tabulation).
+    It calculates the number of unique paths from top-left to bottom-right of an m x n grid,
+    where the robot can only move right or down.
+
+    Time Complexity:
+        - O(m*n)
+            * We visit each cell exactly once
+            * For each cell, we perform O(1) operations
+            * Total operations = m*n
+
+    Space Complexity:
+        - O(m*n)
+            * We maintain a 2D table of size m*n
+            * Each cell stores the number of paths to reach it
+            * No additional space is needed
+
+    Advantages over Recursion with Memoization:
+        - No recursion overhead
+        - No stack space for recursive calls
+        - More straightforward to implement
+        - Better cache utilization due to sequential access
+
+    Attributes:
+        result (int): The number of unique paths calculated for the given grid dimensions.
+    """
+
+    def __init__(self, m: int, n: int) -> None:
+        """
+        Initialize the solution with grid dimensions and calculate the result.
+
+        Args:
+            m (int): Number of rows in the grid
+            n (int): Number of columns in the grid
+        """
+        self.result: int = self.tabulation(m, n)
+
+    def __call__(self) -> int:
+        """
+        Return the calculated result when the class instance is called.
+
+        Returns:
+            int: The number of unique paths
+        """
+        return self.result
+
+    def tabulation(self, m: int, n: int) -> int:
+        """
+        Calculate the number of unique paths using bottom-up dynamic programming.
+
+        Args:
+            m (int): Number of rows in the grid
+            n (int): Number of columns in the grid
+
+        Returns:
+            int: Number of unique paths from top-left to bottom-right
+        """
+        # Initialize table with zeros
+        table: List[List[int]] = [[0 for _ in range(n)] for _ in range(m)]
+
+        # Set base cases - first row and column
+        for i in range(m):
+            table[i][0] = 1  # First column
+        for j in range(n):
+            table[0][j] = 1  # First row
+
+        # Fill the table
+        for i in range(1, m):
+            for j in range(1, n):
+                table[i][j] = table[i-1][j] + table[i][j-1]
+
+        return table[m-1][n-1]
+
+
 def main() -> None:
     """
     Main function to demonstrate the solution with example inputs.
     """
     m: Final[int] = 3
     n: Final[int] = 7
+    
+    # Test both solutions
     results_with_recursion = RecursionPlusMemoization(m, n)
-    print(f"Number of unique paths for {m}x{n} grid: {results_with_recursion()}")
+    results_with_tabulation = BottomUpTabulation(m, n)
+    
+    print(f"Number of unique paths for {m}x{n} grid:")
+    print(f"Using Recursion with Memoization: {results_with_recursion()}")
+    print(f"Using Bottom-up Tabulation: {results_with_tabulation()}")
 
 
 if __name__ == "__main__":
