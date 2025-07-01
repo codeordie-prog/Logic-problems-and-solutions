@@ -2,13 +2,39 @@ from typing import Any
 from collections import Counter
 
 class Solution:
+    """
+    Determines if a ransom note can be constructed from the letters of a magazine.
+    """
     def __init__(self, ransomNote: str, magazine: str) -> None:
+        """
+        Initialize the Solution and determine if ransomNote can be constructed from magazine.
+
+        Args:
+            ransomNote (str): The ransom note string to construct.
+            magazine (str): The magazine string to use letters from.
+        """
         self.result: bool = self.can_construct(ransomNote, magazine)
 
     def __call__(self, *args: Any, **kwds: Any) -> bool:
+        """
+        Return the result of the construction check.
+
+        Returns:
+            bool: True if ransomNote can be constructed from magazine, False otherwise.
+        """
         return self.result
 
     def can_construct(self, ransomNote: str, magazine: str) -> bool:
+        """
+        Check if ransomNote can be constructed from magazine using each letter at most once.
+
+        Args:
+            ransomNote (str): The ransom note string to construct.
+            magazine (str): The magazine string to use letters from.
+
+        Returns:
+            bool: True if possible, False otherwise.
+        """
         counter = Counter(magazine)
         for char in ransomNote:
             if char in counter and counter[char] > 0:
@@ -19,6 +45,9 @@ class Solution:
 
 
 def main() -> None:
+    """
+    Runs several test cases to verify the Solution class for ransom note construction.
+    """
     test_cases = [
         ("a", "b", False),
         ("aa", "ab", False),
