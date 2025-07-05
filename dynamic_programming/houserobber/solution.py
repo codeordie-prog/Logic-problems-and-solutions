@@ -63,19 +63,43 @@ class RecursionPlusMemoization:
     
 
 class Tabulation:
+    """
+    A solution class that uses the tabulation (bottom-up dynamic programming) approach to solve the house robber problem.
+    This method builds up the solution iteratively using a DP table to store the maximum money that can be robbed up to each house.
+    """
     def __init__(self, nums: List[int]) -> None:
+        """
+        Initialize the solution with the given array of house values and compute the result using tabulation.
+
+        Args:
+            nums (List[int]): Array representing money in each house.
+        """
         self.result: int = self.rob(nums)
 
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
+    def __call__(self, *args: Any, **kwds: Any) -> int:
+        """
+        Callable interface to return the computed result.
+
+        Returns:
+            int: Maximum amount of money that can be robbed.
+        """
         return self.result
     
     def rob(self, nums: List[int]) -> int:
+        """
+        Calculate the maximum amount of money that can be robbed using tabulation (bottom-up DP).
 
+        Args:
+            nums (List[int]): Array representing money in each house.
+
+        Returns:
+            int: Maximum amount of money that can be robbed.
+        """
         n: int = len(nums)
         if n == 1:
             return nums[0]
 
-        table = [0 for _ in range(n)]
+        table: List[int] = [0 for _ in range(n)]
         table[0] = nums[0]
         table[1] = max(nums[0], nums[1])
 
