@@ -62,6 +62,32 @@ class RecursionPlusMemoization:
         return helper(0)
     
 
+class Tabulation:
+    def __init__(self, nums: List[int]) -> None:
+        self.result: int = self.rob(nums)
+
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        return self.result
+    
+    def rob(self, nums: List[int]) -> int:
+
+        n: int = len(nums)
+        if n == 1:
+            return nums[0]
+
+        table = [0 for _ in range(n)]
+        table[0] = nums[0]
+        table[1] = max(nums[0], nums[1])
+
+        for i in range(2, n):
+            table[i] = max(nums[i] + table[i-2], table[i-1])
+
+        print(table)
+        return table[-1]
+    
+
+
+
 def main() -> None:
     """
     Main function to test the house robber solution with multiple test cases.
@@ -78,7 +104,11 @@ def main() -> None:
     
     for idx, case in enumerate(test_cases, 1):
         result: RecursionPlusMemoization = RecursionPlusMemoization(case["nums"])
+        result2: Tabulation = Tabulation(case["nums"])
         res: int = result()
+        res2: int = result2()
+
+        assert res == res2
         print(f"Test case {idx}: nums={case['nums']} -> Result: {res} (Expected: {case['expected']}){' [PASS]' if res == case['expected'] else ' [FAIL]'}")
 
 if __name__ == "__main__":
