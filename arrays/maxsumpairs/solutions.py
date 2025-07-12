@@ -73,9 +73,54 @@ class SolutionB:
         return max_sum
     
 
+class SolutionC:
+    """
+    Finds the maximum sum by grouping numbers and then finding the two largest in each group without sorting.
+    """
+    def __init__(self, nums: List[int]) -> None:
+        self.result: int = self.max_sum(nums)
+
+    def __call__(self, *args: Any, **kwds: Any) -> int:
+        return self.result
+
+    def max_sum(self, nums: List[int]) -> int:
+        """
+        Groups numbers by digit sum and finds the two largest in each group to compute the max sum.
+        """
+        store: DefaultDict[int, List[int]] = defaultdict(list)
+        max_sum: int = -1
+
+        def get_sum(num: int) -> int:
+            total: int = 0
+            while num > 0:
+                total += num % 10
+                num //= 10
+            return total
+        
+        for num in nums:
+            total: int = get_sum(num)
+            store[total].append(num)
+
+        for group in store.values():
+            if len(group) > 1:
+                largest = -1
+                second_largest = -1
+                for num in group:
+                    if num > largest:
+                        second_largest = largest
+                        largest = num
+                    elif num > second_largest:
+                        second_largest = num
+                
+                if second_largest != -1:
+                    max_sum = max(max_sum, largest + second_largest)
+
+        return max_sum
+
+
 def main() -> None:
     """
-    Runs multiple test cases for both solutions and checks for consistency.
+    Runs multiple test cases for all solutions and checks for consistency.
     """
     test_cases: List[List[int]] = [
         [368, 369, 307, 304, 384, 138, 90, 279, 35, 396, 114, 328, 251, 364, 300, 191, 438, 467, 183],
@@ -88,7 +133,8 @@ def main() -> None:
     for nums in test_cases:
         solution_a: int = SolutionA(nums)()
         solution_b: int = SolutionB(nums)()
-        assert solution_a == solution_b, f"Mismatch: {solution_a} != {solution_b} for input {nums}"
+        solution_c: int = SolutionC(nums)()
+        assert solution_a == solution_b == solution_c, f"Mismatch: A={solution_a}, B={solution_b}, C={solution_c} for input {nums}"
         print(f"Input: {nums}\nMax sum: {solution_a}\n")
 
 
